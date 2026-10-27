@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+struct Node *top = NULL;
+
+void push()
+{
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    if (newNode == NULL)
+    {
+        printf("Stack Overflow (Heap memory full)\n");
+        return;
+    }
+
+    int value;
+
+    printf("Enter value: ");
+    scanf("%d", &value);
+
+    newNode->data = value;
+    newNode->next = top;
+    top = newNode;
+
+    printf("Element pushed successfully\n");
+}
+
+void pop()
+{
+    if (top == NULL)
+    {
+        printf("Stack Underflow\n");
+        return;
+    }
+
+    struct Node *temp = top;
+
+    printf("Popped element: %d\n", top->data);
+
+    top = top->next;
+    free(temp);
+}
+
+void display()
+{
+    if (top == NULL)
+    {
+        printf("Stack is empty\n");
+        return;
+    }
+
+    struct Node *temp = top;
+
+    printf("Stack elements are:\n");
+
+    while (temp != NULL)
+    {
+        printf("%d\n", temp->data);
+        temp = temp->next;
+    }
+}
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        printf("\n--- Stack Using Linked List ---\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1)
+        {
+            printf("Invalid input. Exiting.\n");
+            break;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                push();
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Exiting program\n");
+                break;
+
+            default:
+                printf("Invalid choice\n");
+        }
+
+    } while (choice != 4);
+
+    while (top != NULL)
+    {
+        struct Node *temp = top;
+        top = top->next;
+        free(temp);
+    }
+
+    return 0;
+}
