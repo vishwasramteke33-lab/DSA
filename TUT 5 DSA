@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SIZE 10
+
+struct stc {
+    int a[SIZE];
+    int x;
+} tag;
+
+int stfull() {
+    if (tag.x >= SIZE - 1)
+        return 1;
+    else
+        return 0;
+}
+
+int stempty() {
+    if (tag.x == -1)
+        return 1;
+    else
+        return 0;
+}
+
+int pop() {
+    int b;
+
+    b = tag.a[tag.x];
+    tag.x--;
+
+    return b;
+}
+
+void push(int b) {
+    tag.x++;
+    tag.a[tag.x] = b;
+}
+
+void display() {
+    int i;
+
+    if (stempty())
+        printf("\nStack is empty!!");
+    else {
+        for (i = tag.x; i >= 0; i--)
+            printf("\n%d", tag.a[i]);
+    }
+}
+
+int main(void) {
+    int b, choice;
+    char ans;
+
+    tag.x = -1;
+
+    printf("\n\t\t ---- Implementation of stack ----");
+
+    do {
+        printf("\nMain menu");
+        printf("\n1. Push\n2. Pop\n3. Display\n4. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("\nEnter the item to be pushed: ");
+                scanf("%d", &b);
+
+                if (stfull())
+                    printf("\nStack is full!");
+                else
+                    push(b);
+                break;
+
+            case 2:
+                if (stempty())
+                    printf("\nEmpty Stack! Underflow!!");
+                else {
+                    b = pop();
+                    printf("\nPopped element is: %d", b);
+                }
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                exit(0);
+        }
+
+        printf("\nDo you want to continue? (Y/N): ");
+        scanf(" %c", &ans);
+
+    } while (ans == 'Y' || ans == 'y');
+
+    return 0;
+}
