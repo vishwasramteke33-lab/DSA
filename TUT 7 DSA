@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+void push(int value) {
+    if (top >= MAX - 1) {
+        printf("Stack Overflow\n");
+        exit(1);
+    }
+    stack[++top] = value;
+}
+
+int pop() {
+    if (top < 0) {
+        printf("Stack Underflow (Invalid Postfix Expression)\n");
+        exit(1);
+    }
+    return stack[top--];
+}
+
+int evaluatePostfix(char *expression) {
+    char *token = strtok(expression, " \n");
+
+    while (token != NULL) {
+        if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
+            push(atoi(token));
+        }
+        else if (strlen(token) == 1 &&
+                (token[0] == '+' || token[0] == '-' ||
+                 token[0] == '*' || token[0] == '/')) {
+
+            int val2 = pop();
+            int val1 = pop();
+
+            switch (token[0]) {
+                case '+':
+                    push(val1 + val2);
+                    break;
+
+                case '-':
+                    push(val1 - val2);
+                    break;
+
+                case '*':
+                    push(val1 * val2);
+                    break;
+
+                case '/':
+                    if (val2 == 0) {
+                        printf("Error: Division by zero\n");
+                        exit(1);
+                    }
+                    push(val1 / val2);
+                    break;
+            }
+        }
+
+        token = strtok(NULL, " \n");
+    }
+
+    return pop();
+}
+
+int main() {
+    char expression[MAX];
+
+    printf("Enter a space-separated postfix expression (e.g., \"10 2 3 * +\"):\n");
+
+    if (fgets(expression, sizeof(expression), stdin) != NULL) {
+        int result = evaluatePostfix(expression);
+        printf("The result of evaluation is: %d\n", result);
+    }
+
+    return 0;
+}
